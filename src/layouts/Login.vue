@@ -40,14 +40,7 @@
 <script>
 import Vue from 'vue'
 import { LocalStorage } from 'quasar'
-import { Ability, AbilityBuilder } from '@casl/ability'
-import defineRulesFor from '../config/ability'
-import { abilitiesPlugin, Can } from '@casl/vue'
-
-// Vue.use(abilitiesPlugin)
-
-const ability = new Ability()
-
+import { defineRulesFor } from '../config/ability'
 
 export default {
     name: "Login",
@@ -79,10 +72,11 @@ export default {
                 this.$axios.get('https://jpdigi-kioskapi-uat.rintis.co.id/users', params )
                 .then(result => {
                     const role = result.data.data[0].roles[0]
-                    console.log(defineRulesFor(role))
-                    ability.update(defineRulesFor(role))
+                    LocalStorage.set('users', result.data.data[0])
+                    this.$ability.update(defineRulesFor(role))
 
                     this.$router.push('/')
+
                 })
             })
         }
